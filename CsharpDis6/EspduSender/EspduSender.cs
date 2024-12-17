@@ -198,7 +198,7 @@ namespace EspduSender
                 marking = marking.PadRight(lengthConstraint, '\0');
             }
 
-            for (int i = 0; i < 100; i++)
+            while(true)
             {
                 espdu.Marking.Characters = System.Text.Encoding.ASCII.GetBytes(marking);
 
@@ -227,9 +227,9 @@ namespace EspduSender
                 SendMessages(dos.ConvertToBytes());
                 Console.WriteLine("Message sent with TimeStamp [{0}] Time Of[{1}]", espdu.Timestamp, espdu.Timestamp >> 1);
 
-                //Thread.Sleep(1000);
-                Console.WriteLine("Hit Enter for Next PDU.  Ctrl-C to Exit");
-                Console.ReadLine();
+                Thread.Sleep(1000);
+                //Console.WriteLine("Hit Enter for Next PDU.  Ctrl-C to Exit");
+                //Console.ReadLine();
             }
 
             mcastSocket.Close();
