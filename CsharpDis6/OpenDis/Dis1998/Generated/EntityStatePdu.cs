@@ -174,7 +174,7 @@ namespace OpenDis.Dis1998
         /// Gets or sets the a series of bit flags that are used to help draw the entity, such as smoking, on fire, etc.
         /// </summary>
         [XmlElement(Type = typeof(int), ElementName = "entityAppearance")]
-        public int EntityAppearance { get; set; }
+        public uint EntityAppearance { get; set; }
 
         /// <summary>
         /// Gets or sets the parameters used for dead reckoning
@@ -226,7 +226,8 @@ namespace OpenDis.Dis1998
                     EntityLinearVelocity.Marshal(dos);
                     EntityLocation.Marshal(dos);
                     EntityOrientation.Marshal(dos);
-                    dos.WriteInt(EntityAppearance);
+                    //dos.WriteInt(EntityAppearance);
+                    dos.WriteUnsignedInt(EntityAppearance);
                     DeadReckoningParameters.Marshal(dos);
                     Marking.Marshal(dos);
                     dos.WriteInt(Capabilities);
@@ -272,7 +273,8 @@ namespace OpenDis.Dis1998
                     EntityLinearVelocity.Unmarshal(dis);
                     EntityLocation.Unmarshal(dis);
                     EntityOrientation.Unmarshal(dis);
-                    EntityAppearance = dis.ReadInt();
+                    //EntityAppearance = dis.ReadInt();
+                    EntityAppearance = dis.ReadUnsignedInt();
                     DeadReckoningParameters.Unmarshal(dis);
                     Marking.Unmarshal(dis);
                     Capabilities = dis.ReadInt();

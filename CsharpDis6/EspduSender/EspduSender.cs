@@ -3,6 +3,7 @@ using System.Net;
 using System.Net.Sockets;
 using OpenDis.Core;
 using OpenDis.Dis1998;
+using OpenDis.Enumerations.EntityState.Appearance;
 
 namespace EspduSender
 {
@@ -68,7 +69,7 @@ namespace EspduSender
                 //Console.Write("Enter the local IP address: ");
 
                 //IPAddress localIPAddr = IPAddress.Parse(Console.ReadLine());
-                var localIPAddr = IPAddress.Parse("172.19.36.86");
+                var localIPAddr = IPAddress.Parse("192.168.0.93");
 
                 //IPAddress localIP = IPAddress.Any;
                 var localEP = (EndPoint)new IPEndPoint(localIPAddr, mcastPort);
@@ -107,7 +108,7 @@ namespace EspduSender
                 mcastSocket.SetSocketOption(SocketOptionLevel.Socket,
                                             SocketOptionName.Broadcast,
                                             1);
-                var localIPAddr = IPAddress.Parse("172.19.36.255");
+                var localIPAddr = IPAddress.Parse("192.168.0.93");
 
                 endPoint = new IPEndPoint(IPAddress.Broadcast, broadcastPort);
                 //endPoint = new IPEndPoint(localIPAddr, broadcastPort);
@@ -145,9 +146,9 @@ namespace EspduSender
             double lon = -122.425;
 
             // Configure socket.
-            //JoinMulticast();   //Used to talk to C# receiver.  No need to connect as we are just sending multicast
+            JoinMulticast();   //Used to talk to C# receiver.  No need to connect as we are just sending multicast
             //StartMulticast();  //Least preffered
-            StartBroadcast();      //Used for DisMapper      
+            //StartBroadcast();      //Used for DisMapper      
 
             //Setup EntityState PDU 
             espdu.ExerciseID = 1;
@@ -163,19 +164,44 @@ namespace EspduSender
             // numbers here.
             var entityType = espdu.EntityType;
             entityType.EntityKind = 1;      // Platform (vs lifeform, munition, sensor, etc.)
-            entityType.Country = 255;              // USA
-            entityType.Domain = 1;          // Land (vs air, surface, subsurface, space)
-            entityType.Category = 1;        // Tank
-            entityType.Subcategory = 1;     // M1 Abrams
-            entityType.Specific = 3;            // M1A2 Abrams
+            entityType.Country = 71;              // France
+            entityType.Domain = 3;          // Surface (vs air, surface, subsurface, space)
+            entityType.Category = 8;        // Mine Countermeasure Ship/Craft
+            entityType.Subcategory = 1;
+            entityType.Specific = 3;
+
+            // 32-bit int
+            SurfacePlatformAppearance spappearance = new SurfacePlatformAppearance()
+            {
+                State = SurfacePlatformAppearance.StateValue.Deactivated
+            };
+
+            espdu.EntityAppearance = spappearance.ToUInt32();
 
             // Orientation (degrees)
             double heading = 0.0;
             double pitch   = 45.0;
             double roll    = 0.0;
 
+            // marking
+            String marking = "mac12345678";
+
+            // if >11, truncate
+            // if <11 fill with 0x00
+            int lengthConstraint = espdu.Marking.Characters.Length;
+            if (marking.Length > lengthConstraint)
+            {
+                marking = marking.Substring(0, lengthConstraint);
+            }
+            else if (marking.Length < lengthConstraint)
+            {
+                marking = marking.PadRight(lengthConstraint, '\0');
+            }
+
             for (int i = 0; i < 100; i++)
             {
+                espdu.Marking.Characters = System.Text.Encoding.ASCII.GetBytes(marking);
+
                 lon += (i / 1000.0);
 
                 double[] disCoordinates = CoordinateConversions.getXYZfromLatLonDegrees(lat, lon, 0.0);
