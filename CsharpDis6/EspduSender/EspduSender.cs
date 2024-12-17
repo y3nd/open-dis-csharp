@@ -1,6 +1,7 @@
 using System;
 using System.Net;
 using System.Net.Sockets;
+using System.Threading;
 using OpenDis.Core;
 using OpenDis.Dis1998;
 using OpenDis.Enumerations.EntityState.Appearance;
@@ -198,6 +199,7 @@ namespace EspduSender
                 marking = marking.PadRight(lengthConstraint, '\0');
             }
 
+            int i = 0;
             while(true)
             {
                 espdu.Marking.Characters = System.Text.Encoding.ASCII.GetBytes(marking);
@@ -230,6 +232,8 @@ namespace EspduSender
                 Thread.Sleep(1000);
                 //Console.WriteLine("Hit Enter for Next PDU.  Ctrl-C to Exit");
                 //Console.ReadLine();
+
+                i+= 1;
             }
 
             mcastSocket.Close();
