@@ -122,7 +122,7 @@ namespace OpenDis.Enumerations.EntityState.Appearance
             /// Frozen (Frozen entities should not be dead-reckoned, i.e. should be displayed as fixed at the current location
             /// even if non-zero velocity, acceleration or rotation data received from the frozen entity)
             /// </summary>
-            FrozenFrozenEntitiesShouldNotBeDeadReckonedIEShouldBeDisplayedAsFixedAtTheCurrentLocationEvenIfNonZeroVelocityAccelerationOrRotationDataReceivedFromTheFrozenEntity = 1
+            Frozen = 1
         }
 
         /// <summary>

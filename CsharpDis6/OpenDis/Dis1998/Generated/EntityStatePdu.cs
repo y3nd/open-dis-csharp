@@ -173,7 +173,7 @@ namespace OpenDis.Dis1998
         /// <summary>
         /// Gets or sets the a series of bit flags that are used to help draw the entity, such as smoking, on fire, etc.
         /// </summary>
-        [XmlElement(Type = typeof(int), ElementName = "entityAppearance")]
+        [XmlElement(Type = typeof(uint), ElementName = "entityAppearance")]
         public uint EntityAppearance { get; set; }
 
         /// <summary>

@@ -163,7 +163,7 @@ namespace OpenDis.Core
         /// <param name="roll"> roll in DEGREES </param>
         /// <param name="latitude"> latitude in DEGREES </param>
         /// <param name="longitude"> longitude in DEGREES </param> 
-        /// <returns> a double[3] array with Psi, Theta, Phi </returns>
+        /// <returns> a double[3] array with Psi, Theta, Phi in RADIANS </returns>
         public static double[] headingPitchRollToEuler(double heading, double pitch, double roll, double latitude, double longitude)
         {
             //////////     DEG2RAD    ///////////
@@ -216,7 +216,7 @@ namespace OpenDis.Core
             double[] y2 = rotateAboutAxis(y0, z0, Psi);
             double[] z2 = rotateAboutAxis(z0, y2, Theta);
             double Phi = Math.Atan2(dot(E3, z2), dot(E3, y2));
-
+            
             return new double[] { Psi, Theta, Phi };
         }
     }
